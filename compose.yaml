@@ -1,0 +1,34 @@
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: consolehub-postgres
+    environment:
+      POSTGRES_DB: consolehub
+      POSTGRES_USER: consolehub
+      POSTGRES_PASSWORD: consolehub_dev
+    ports:
+      - "5431:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U consolehub -d consolehub"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: consolehub-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: consolehub
+      RABBITMQ_DEFAULT_PASS: consolehub_dev
+    ports:
+      - "5671:5672"
+      - "15671:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
