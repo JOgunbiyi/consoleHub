@@ -51,6 +51,69 @@ public class Game {
         this.published = false;
     }
 
+    public void updateDetails(
+        String title,
+        String description,
+        BigDecimal price,
+        int sizeMb
+    ){
+        if(title == null || title.isBlank()){
+            throw new IllegalArgumentException(
+                "Game title cannot be blank"
+            );
+        }
+
+        if(price == null || price.signum() < 0){
+            throw new IllegalArgumentException(
+                "Game price cannot be negative"
+            );
+        }
+
+        if(sizeMb <= 0){
+            throw new IllegalArgumentException(
+                "Game size must be positive"
+            );
+        }
+
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.sizeMb = sizeMb;
+    }
+    
+    public void publish(){
+        if(this.published){
+            throw new IllegalArgumentException(
+                "Game is already puiblished"
+            );
+        }
+
+        this.published = true;
+    }
+
+    public void applyDiscount(BigDecimal newPrice){
+        /** Apply discount will be what is considered as a 'Discount event. Not updating the price' */
+        if(!this.published){
+            throw new IllegalArgumentException(
+                "Cannot discount an unpublished game"
+            );
+        }
+
+        if(newPrice == null || newPrice.signum() < 0){
+            throw new IllegalArgumentException(
+                "Discounted price cannot be negative"
+            );
+        }
+
+        if(newPrice.compareTo(this.price) >= 0){
+            throw new IllegalArgumentException(
+                "Discounted price must be lower than current price"
+            );
+        }
+
+        this.price = newPrice;
+    }
+
     /* GETTERS */
     public String getCurrency() {
         return currency;
@@ -78,5 +141,9 @@ public class Game {
 
     public Long getVersion() {
         return version;
+    }
+
+    public boolean isPublished(){
+        return published;
     }
 }

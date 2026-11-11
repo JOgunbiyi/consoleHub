@@ -6,7 +6,7 @@ CREATE TABLE games(
     currency VARCHAR(3) NOT NULL DEFAULT 'EUR',     -- Currency price 
     size_mb INTEGER NOT NULL,                       -- Game Size
     published BOOLEAN NOT NULL DEFAULT FALSE,       -- Game published state
-    version BIGINT NOT NULL DEFAULT 0               -- Gake Version
+    version BIGINT NOT NULL DEFAULT 0,              -- Gake Version
 
 
     CONSTRAINT chk_games_price -- We can have free games but not negative priced games

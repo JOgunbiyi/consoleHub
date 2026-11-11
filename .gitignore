@@ -16,6 +16,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
+*.docx
 
 ### IntelliJ IDEA ###
 .idea
@@ -36,3 +37,5 @@ build/
 ### VS Code ###
 .vscode/
 .DS_Store
+
+testData.txt
