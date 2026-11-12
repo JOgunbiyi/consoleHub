@@ -55,7 +55,7 @@ public class Game {
         String title,
         String description,
         BigDecimal price,
-        int sizeMb
+        Integer sizeMb
     ){
         if(title == null || title.isBlank()){
             throw new IllegalArgumentException(
@@ -83,8 +83,8 @@ public class Game {
     
     public void publish(){
         if(this.published){
-            throw new IllegalArgumentException(
-                "Game is already puiblished"
+            throw new IllegalStateException(
+                "Game is already published"
             );
         }
 
@@ -92,9 +92,9 @@ public class Game {
     }
 
     public void applyDiscount(BigDecimal newPrice){
-        /** Apply discount will be what is considered as a 'Discount event. Not updating the price' */
+        /** Apply discount will be what is considered as a 'Discount event' */
         if(!this.published){
-            throw new IllegalArgumentException(
+            throw new IllegalStateException(
                 "Cannot discount an unpublished game"
             );
         }

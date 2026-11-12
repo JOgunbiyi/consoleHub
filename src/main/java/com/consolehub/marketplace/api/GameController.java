@@ -14,11 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.consolehub.marketplace.api.dto.ApplyDiscountRequest;
 import com.consolehub.marketplace.api.dto.CreateGameRequest;
 import com.consolehub.marketplace.api.dto.GameResponse;
+import com.consolehub.marketplace.api.dto.UpdateGameRequest;
 import com.consolehub.marketplace.application.GameService;
+import com.consolehub.marketplace.domain.Game;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -35,8 +42,8 @@ public class GameController {
     public GameResponse createGame(
         @Valid @RequestBody CreateGameRequest request) {
 
-            return gameService.createGame(request);
-        }
+        return gameService.createGame(request);
+    }
 
     @GetMapping("/games")
     public List<GameResponse> getPublishedGames() {
@@ -46,5 +53,31 @@ public class GameController {
     @GetMapping("/games/{id}")
     public GameResponse getPublishedGame(@PathVariable UUID id){
         return gameService.getPublishedGame(id);
+    }
+
+    @GetMapping("admin/games/{id}")
+    public GameResponse getAdminGame(@PathVariable UUID id) {
+        return gameService.getAdminGame(id);
+    }
+
+    @PutMapping("admin/games/{id}")
+    public GameResponse updateGame(@PathVariable UUID id, 
+        @RequestBody UpdateGameRequest request){
+            return gameService.updateGame(id, request);
+        }
+    
+
+    @PostMapping("admin/games/{id}/publish")
+    public GameResponse publishGame(@PathVariable UUID id,
+        @RequestParam Long version
+    ) {
+        return gameService.publishGame(id, version);
+    }
+
+    @PostMapping("/admin/games/{id}/discount")
+    public GameResponse discountGame(
+        @PathVariable UUID id, @Valid @RequestBody ApplyDiscountRequest request) {
+
+        return gameService.applyDiscount(id, request);
     }
 }

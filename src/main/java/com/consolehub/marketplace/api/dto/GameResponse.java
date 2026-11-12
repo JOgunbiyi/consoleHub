@@ -10,5 +10,6 @@ public record GameResponse (
     BigDecimal price,
     String currency,
     Integer sizeMb,
-    boolean published
+    boolean published,
+    Long version
 ) {}

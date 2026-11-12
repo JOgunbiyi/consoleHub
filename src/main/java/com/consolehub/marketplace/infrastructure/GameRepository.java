@@ -10,6 +10,7 @@ import com.consolehub.marketplace.domain.Game;
 
 public interface GameRepository extends JpaRepository<Game, UUID> {
     List<Game> findByPublishedTrue();
-
     Optional<Game> findByIdAndPublishedTrue(UUID id);
+
+    Optional<Game> findById(UUID id);
 }
