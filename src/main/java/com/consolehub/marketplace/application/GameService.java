@@ -3,18 +3,16 @@ package com.consolehub.marketplace.application;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
+import com.consolehub.marketplace.api.dto.ApplyDiscountRequest;
 import com.consolehub.marketplace.api.dto.CreateGameRequest;
 import com.consolehub.marketplace.api.dto.GameResponse;
 import com.consolehub.marketplace.api.dto.UpdateGameRequest;
-import com.consolehub.marketplace.api.dto.ApplyDiscountRequest;
-
-
 import com.consolehub.marketplace.domain.Game;
+import com.consolehub.marketplace.exceptions.GameConflictException;
+import com.consolehub.marketplace.exceptions.GameNotFoundException;
 import com.consolehub.marketplace.infrastructure.GameRepository;
 
 @Service
@@ -117,9 +115,8 @@ public class GameService {
 
         Game game = gameRepository
         .findByIdAndPublishedTrue(id)
-        .orElseThrow(() -> new ResponseStatusException(
-            HttpStatus.NOT_FOUND,
-            "Game not found"
+        .orElseThrow(() -> new GameNotFoundException(
+            "Published game not found"
         ));
 
         return toResponse(game);
@@ -132,9 +129,8 @@ public class GameService {
      */
     public Game findGame(UUID id){
         return gameRepository.findById(id).
-        orElseThrow(() -> new ResponseStatusException(
-            HttpStatus.NOT_FOUND,
-            "Game not found"
+        orElseThrow(() -> new GameNotFoundException(
+            "Game not found " + id
         ));
     }
 
@@ -145,9 +141,8 @@ public class GameService {
      */
     private void checkVersion(Game game, Long expectedVersion){
         if(!game.getVersion().equals(expectedVersion)){
-            throw new ResponseStatusException(
-                HttpStatus.CONFLICT,
-                "Game was modified by another request "
+            throw new GameConflictException(
+                "Game was modified by another request"
             );
         }
     }

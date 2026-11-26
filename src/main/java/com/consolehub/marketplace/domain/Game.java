@@ -41,14 +41,16 @@ public class Game {
         //Needed by JPA
     }
 
-    public Game(String title, String description, BigDecimal price, Integer sizeMb){
+    public Game(String title, 
+                String description, 
+                BigDecimal price, 
+                Integer sizeMb){
+
         this.id = UUID.randomUUID();
-        this.title = title;
-        this.description = description;
-        this.price = price;
         this.currency = "EUR";
-        this.sizeMb = sizeMb;
         this.published = false;
+
+        updateDetails(title, description, price, sizeMb);
     }
 
     public void updateDetails(
@@ -57,19 +59,25 @@ public class Game {
         BigDecimal price,
         Integer sizeMb
     ){
-        if(title == null || title.isBlank()){
+        if(title == null 
+            || title.isBlank() 
+            || title.length() > 200){
             throw new IllegalArgumentException(
-                "Game title cannot be blank"
+                "Game titles must contain between 1 and 200 characters"
             );
         }
 
-        if(price == null || price.signum() < 0){
+        if(price == null 
+            || price.signum() < 0 
+            || price.scale() > 2 
+            || price.precision() - price.scale() > 10
+            ){
             throw new IllegalArgumentException(
-                "Game price cannot be negative"
+            "Game price must be between 0 and 9999999999.99 with at most 2 decimal places"
             );
         }
 
-        if(sizeMb <= 0){
+        if(sizeMb == null || sizeMb <= 0){
             throw new IllegalArgumentException(
                 "Game size must be positive"
             );

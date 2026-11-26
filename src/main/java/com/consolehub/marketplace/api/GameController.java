@@ -62,7 +62,7 @@ public class GameController {
 
     @PutMapping("admin/games/{id}")
     public GameResponse updateGame(@PathVariable UUID id, 
-        @RequestBody UpdateGameRequest request){
+        @Valid @RequestBody UpdateGameRequest request){
             return gameService.updateGame(id, request);
         }
     
